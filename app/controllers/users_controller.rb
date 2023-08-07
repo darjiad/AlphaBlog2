@@ -1,14 +1,14 @@
 class UsersController <ApplicationController
     def show
         @user=User.find(params[:id])
-        @article = @user.articles
+        @article = @user.articles.paginate(page: params[:page], per_page: 2)
     end 
     def new  
         @user=User.new
         
     end
     def index
-        @users=User.all
+        @users=User.paginate(page: params[:page], per_page: 2)
     end
     def create 
         @user=User.new(user_params)
@@ -27,7 +27,7 @@ class UsersController <ApplicationController
         @user=User.find(params[:id])
         if @user.update(user_params)
             flash[:notice]="Your account information Successfully updated"
-            redirect_to articles_path
+            redirect_to @user
         else
             render 'edit'
         end
